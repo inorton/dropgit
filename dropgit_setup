@@ -36,6 +36,9 @@ unless ( defined $opts{r} ){
 my @hostpath = split(/:/,$opts{r});
 my $host = shift @hostpath;
 my $path = shift @hostpath;
+if ( $path !~ /^\// ){
+  die "Please specify an absolute remote path, eg '/home/inb/git_repos/DropGit\n';
+}
 
 open ( DGRC,">$ENV{HOME}/.dropgitrc" ) or die "couldnt write .dropgitrc $!";
 print DGRC "DGROOT=$opts{l}\n";
@@ -47,7 +50,7 @@ unless ( -d "$opts{l}/.git" ){
   system("git init");
 }
 
-system("git remote add origin ssh://$host$path");
+system("git remote add origin ssh://$host/$path");
 print ".. now setup your remote DropGit git repository at $host:$path \n";
 print ".. transfer script to $host\n";
 if ( create_script($host,$path,"Remote DroptGit Master") == 0 ){

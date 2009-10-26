@@ -1,0 +1,67 @@
+DropGit v0.0.1 - (c) 2009 Ian Norton <inorton@gmail.com>
+----------------------------------------------------------
+
+What is DropGit?
+-----------------
+
+DropGit simply gives you a magic folder where whatever you place 
+inside gets versioned and backed-up automatically to a remote 
+server (under your control) via ssh.
+
+What Do I need?
+----------------
+
+perl    5.6 or later
+iwatch  0.2.1 or later
+git     1.6.x or later
+ssh
+
+You also should have setup password-less ssh access to the server you intend to 
+use as the remote repository for your DropGit, You might just create an 
+ssh-identity with no password or might make use of other tools like seahorse to
+protect your ssh private key.
+
+Installation
+-------------
+
+run "make install" as root
+
+Setup Your DropGit folder
+--------------------------
+
+You may be prompted for your ssh user or key password if you have not setup ssh key based authentication, please get that working well first.
+
+run:
+$ dropgit_setup -l ~/Desktop/DropGit -r username@myserver.hostname:DropGit
+
+
+Seahorse / Gnome Integration
+-----------------------------
+
+ensure you have seahorse installed and then run:
+$ gnome-session-properties
+
+Find the entry for Seahorse-agent and then change the command line to be:-
+
+"seahorse-agent --execute dropgit_monitor"
+
+Logout, then login again and dropgit should be autostarted
+
+
+Legal
+-----
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software 
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
