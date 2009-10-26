@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+BEGIN {
+  my $bindir = `dirname $0`;
+  chomp $bindir;
+  push @INC, $bindir;
+}
+
+use dropgit;
+
+## main
+
+if ( ( $#ARGV == 0 ) || $ARGV[0] eq "--help" || $ARGV[0] eq "-h" ){
+  print qq|Usage $0: [-h] [-ds] filename [ event ]
+  Commit filename to your DropGit stash
+
+  -d   delete filename
+  -s   save   filename
+
+DropGit v0.0.1 <inorton\@gmail.com>
+|;
+  exit(-1);
+}
+
+my $mode = "-s";
+
+if ( $ARGV[0] =~ /^\-[sd]$/ ){
+  $mode = shift @ARGV;
+}
+
+my $fn = shift @ARGV;
+if ( $mode eq "-s" ){
+  dropgit::save($fn);
+}
+if ( $mode eq "-d" ){
+  dropgit::remove($fn);
+}
+

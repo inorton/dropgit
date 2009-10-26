@@ -1,0 +1,57 @@
+#!/usr/bin/perl
+
+
+BEGIN {
+  my $bindir = `dirname $0`;
+  chomp $bindir;
+  push @INC, $bindir;
+}
+
+use dropgit;
+my $scripts = @INC[$#INC];
+my $wpid = undef;
+
+## make sure *.dglock is in .gitignore
+my $ignore = 0;
+if ( -f "$dropgit::DGROOT/.gitignore" ){
+  my $ct = `grep -c "*.dglock" $dropgit::DGROOT/.gitignore`;
+  chomp $ct;
+  if ( $ct > 0 ){
+    $ignore = 1;
+  }
+}
+
+if ( $ignore == 0 ){
+  open ( GI, ">>$dropgit::DGROOT/.gitignore" ) or die "couldnt write .gitignore file $!";
+  print GI qq|# added by dropgit
+*.dglock
+*.tmp
+*.swp
+*ntitled*
+|;
+  close ( GI );
+}
+
+# fork write monitor
+$wpid = fork();
+unless ( $wpid ){
+  system("iwatch","-c",qq|$scripts/dropgit -s '%f' %e|,"-e","create,close_write,move,moved_to","-r","-X",".git","-v","$dropgit::DGROOT");
+  exit;
+}
+
+my $dpid = undef;
+# fork delete monitor
+$dpid = fork();
+unless ( $dpid ){
+  system("iwatch","-c",qq|$scripts/dropgit -d '%f' %e|,"-e","delete,move.moved_from","-r","-X",".git","-v","$dropgit::DGROOT");
+  exit;
+}
+
+while ( $dpid ){
+  dropgit::pull();
+  sleep 20;
+}
+
+kill $dpid;
+kill $wpid;
+
