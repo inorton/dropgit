@@ -6,8 +6,9 @@ BEGIN {
   chomp $bindir;
   push @INC, $bindir;
 }
+use lib "/usr/local/lib/dropgit";
 
-use dropgit;
+use DropGit;
 my $scripts = @INC[$#INC];
 my $wpid = undef;
 

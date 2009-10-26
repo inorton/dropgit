@@ -6,7 +6,9 @@ BEGIN {
   push @INC, $bindir;
 }
 
-use dropgit;
+use lib "/usr/local/lib/dropgit";
+
+use DropGit;
 
 ## main
 
