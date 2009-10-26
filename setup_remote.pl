@@ -37,6 +37,10 @@ my @hostpath = split(/:/,$opts{r});
 my $host = shift @hostpath;
 my $path = shift @hostpath;
 
+open ( DGRC,">$ENV{HOME}/.dropgitrc" ) or die "couldnt write .dropgitrc $!";
+print DGRC "DGROOT=$opts{l}\n";
+close (DGRC);
+
 system("mkdir -p $opts{l}");
 chdir($opts{l});
 unless ( -d "$opts{l}/.git" ){
